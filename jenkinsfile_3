@@ -41,7 +41,7 @@ pipeline{
 
             steps{
                 sh '''
-                    echo "Prooceeding to deploy release version $release in $env environment"
+                    echo "Prooceeding to deploy release version $release in $Env environment"
 
                 '''
             }
