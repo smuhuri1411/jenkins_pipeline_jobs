@@ -1,14 +1,15 @@
 pipeline{
     agent any
-    parallel{
-        stages{
-           stage('Build'){
+    stages{
+        stage('Build'){
+            parallel{
+                stage('linux-amd64'){
                 steps{
                     echo "Starting $STAGE_NAME phase"
                 }
             } 
 
-            stage('Test'){
+            stage('linux-arm64'){
                 environment{
                     log_level = "Audit"
                 }
@@ -18,7 +19,7 @@ pipeline{
                 }
             }
 
-            stage('Deploy'){
+            stage('windows-64'){
                 environment{
                     release = 'R4.0'
                 }
@@ -29,6 +30,8 @@ pipeline{
 
 
             }
+            }
+           
         }
         
     }
