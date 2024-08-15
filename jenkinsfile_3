@@ -38,7 +38,7 @@ pipeline{
                 abort "No"
 
                 parameters{
-                    choice(name: "Env", choices: "Dev\Test\Model\Production", description: "Select the Environmet to deploy")
+                    choice(name: "Env", choices: ['Dev', 'Test', 'Model', 'Production'], description: "Select the Environmet to deploy")
                 }
             }
 
