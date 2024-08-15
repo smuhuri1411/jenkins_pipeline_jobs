@@ -1,0 +1,35 @@
+pipeline{
+    agent any
+    stages{
+        parallel{
+           stage('Build'){
+                steps{
+                    echo "Starting $STAGE_NAME phase"
+                }
+            } 
+
+            stage('Test'){
+                environment{
+                    log_level = "Audit"
+                }
+
+                steps{
+                    echo "$STAGE_NAME phase started with log level $log_level"
+                }
+            }
+
+            stage('Deploy'){
+                environment{
+                    release = 'R4.0'
+                }
+
+                steps{
+                    echo "$STAGE_NAME started with version $release"
+                }
+
+
+            }
+        }
+        
+    }
+}
