@@ -10,9 +10,7 @@ pipeline{
             input{
                 message "Start Build Process?"
                 ok "Start"
-                abort "No"
-
-                
+                                
             }
 
             steps{
@@ -35,8 +33,7 @@ pipeline{
             input{
                 message "Proceed for Deploy?"
                 ok "Yes"
-                abort "No"
-
+                
                 parameters{
                     choice(name: "Env", choices: ['Dev', 'Test', 'Model', 'Production'], description: "Select the Environmet to deploy")
                 }
