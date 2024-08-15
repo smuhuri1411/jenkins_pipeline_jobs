@@ -1,0 +1,52 @@
+pipeline{
+    agent any
+    environment{
+        release = 'R2.0'
+        log_level = 'TRACE'
+    }
+
+    stages{
+        stage('Build'){
+            steps{
+                sh '''
+                echo "In Build Phase..."
+                echo "Building Application A version $release"
+
+            '''
+            }
+            
+        }
+
+        stage('Test'){
+            steps{
+                echo "In the Test Phase"
+                echo "Executing unit tests with log level $log_level"
+            }
+        }
+
+        stage('Deploy'){
+            input{
+                message "Proceed for Deploy?"
+                ok 'Proceed'
+
+                parameters{
+                    string(name: "Environment", description: "Please enter the environment to deploy")
+                }
+            }
+
+            steps{
+                sh '''
+                    echo "Starting to Deploy release version $release in $Environment"
+
+                '''
+            }
+        }
+    }
+
+    post{
+        always{
+            echo "Print Success even if pipeline fails!!"
+        }
+    }
+    
+}
