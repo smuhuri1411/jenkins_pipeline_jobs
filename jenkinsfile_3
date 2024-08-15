@@ -1,0 +1,64 @@
+pipeline{
+    agent any
+    environment{
+        release = 'R3.0'
+        log_level = 'AUDIT'
+    }
+
+    stages{
+        stage('Build'){
+            input{
+                message "Start Build Process?"
+                ok "Start"
+                abort "No"
+
+                
+            }
+
+            steps{
+                sh '''
+                    echo "$STAGE_NAME Phase Started..."
+                    echo "Building application A release version $release"
+
+                '''
+            }
+        }
+
+
+        stage('Unit-Test'){
+            steps{
+                echo "$STAGE_NAME phase started..."
+            }
+        }
+
+        stage('Deploy'){
+            input{
+                message "Proceed for Deploy?"
+                ok "Yes"
+                abort "No"
+
+                parameters{
+                    choice(name: "Env", choices: "Dev\Test\Model\Production", description: "Select the Environmet to deploy")
+                }
+            }
+
+            steps{
+                sh '''
+                    echo "Prooceeding to deploy release version $release in $env environment"
+
+                '''
+            }
+        }
+    }
+
+
+    post{
+        success{
+            echo "Pipeline Succeeded!!!"
+        }
+
+        failure{
+            echo "Pipeline failed... Please check your code!!"
+        }
+    }
+}
