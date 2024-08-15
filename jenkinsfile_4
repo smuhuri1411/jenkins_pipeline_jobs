@@ -1,7 +1,7 @@
 pipeline{
     agent any
-    stages{
-        parallel{
+    parallel{
+        stages{
            stage('Build'){
                 steps{
                     echo "Starting $STAGE_NAME phase"
