@@ -1,0 +1,47 @@
+pipeline{
+    agent any
+    environment{
+        release = "ver1.0"
+    }
+
+    stages{
+        stage('Fetch'){
+            steps{
+                echo "Fetching application code from Git for release "$release""
+            }
+        }
+
+        stage('Build'){
+            steps{
+                sh '''
+                    echo "In the Build phase now.."
+                    echo "Building the application code "$release""
+                '''
+            }
+        }
+
+        stage('Unit-Test'){
+            environment{
+                log_level = "DEBUG"
+            }
+
+            steps{
+                sh '''
+
+                    echo "Executing the Unit Test Cases with log level $log_level"
+
+                '''
+            }
+        }
+    }
+
+    post{
+        success{
+            echo "Pipeline Succeeded!!!"
+        }
+
+        failure{
+            echo "Pipeline Failed... Please check"
+        }
+    }
+}
