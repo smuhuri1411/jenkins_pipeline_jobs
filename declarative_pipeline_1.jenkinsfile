@@ -1,0 +1,50 @@
+pipeline{
+    agent any
+
+    environment{
+        release = '29.0'
+    }
+
+    stages{
+        stage('Checkout'){
+            steps{
+                def gitRepoUrl = "https://github.com/smuhuri1411/Jenkins_course.git"
+
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfig: [[url: gitRepoUrl]],
+                    extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth:1]]
+                ])
+            }
+        }
+
+        stage('Build'){
+            environment{
+                log = "Trace"
+            }
+            steps{
+                sh '''
+                    echo "Building release ${release} with log level ${log}"
+                '''
+            }
+        }
+
+        stage('Test'){
+            steps{
+                sh 'echo "Testing release ${release}, log level is ${log}"'
+            }
+        }
+
+    }
+
+    post{
+        success{
+            echo "Pipeline Succeeded!!!"
+        }
+
+        failure{
+            echo "Pipeline failed.. Please check.."
+        }
+    }
+}
