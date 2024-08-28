@@ -8,7 +8,7 @@ pipeline{
     stages{
         stage('Checkout'){
             steps{
-                srcipt{
+                script{
                 def gitRepoUrl = 'https://github.com/smuhuri1411/Jenkins_course.git'
 
                 checkout([
