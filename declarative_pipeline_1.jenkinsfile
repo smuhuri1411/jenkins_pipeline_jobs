@@ -33,6 +33,7 @@ pipeline{
         stage('Test'){
             steps{
                 sh 'echo "Testing release ${release}, log level is ${log}"'
+                sh 'ls'
             }
         }
 
