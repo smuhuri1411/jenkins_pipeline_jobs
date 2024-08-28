@@ -9,7 +9,7 @@ pipeline{
         stage('Checkout'){
             steps{
                 srcipt{
-                def gitRepoUrl = "https://github.com/smuhuri1411/Jenkins_course.git"
+                def gitRepoUrl = 'https://github.com/smuhuri1411/Jenkins_course.git'
 
                 checkout([
                     $class: 'GitSCM',
