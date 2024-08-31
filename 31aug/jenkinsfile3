@@ -22,8 +22,8 @@ pipeline{
 
         stage('UnitTest'){
             
-            dir('../maven-samples/single-module'){
-                steps{
+            steps{
+                dir('../maven-samples/single-module'){
                     sh '''
                         echo "In "${STAGE_NAME}" stage..."
                         mv test
@@ -34,8 +34,8 @@ pipeline{
         }
 
         stage('Deploy'){
-            dir('../maven-samples/single-module'){
-                steps{
+            steps{
+                dir('../maven-samples/single-module'){
                     sh '''
                         echo "In the Build Phase.. Building App Release "${rel_version}" with integrated version "${int_version}""
                         mvn clean package
