@@ -14,7 +14,7 @@ pipeline{
 
                     checkout([
                         $class: 'GitSCM',
-                        branches: [[name: '*/main']],
+                        branches: [[name: '*/master']],
                         userRemoteConfigs: [[url: gitrepourl]],
                         configuration: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
                     ])
