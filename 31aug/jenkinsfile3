@@ -26,7 +26,7 @@ pipeline{
                 dir('../maven-samples/single-module'){
                     sh '''
                         echo "In "${STAGE_NAME}" stage..."
-                        mv test
+                        mvn test
                     '''
                 }
             }
