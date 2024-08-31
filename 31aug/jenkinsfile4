@@ -41,7 +41,10 @@ pipeline{
         }
     }
 
-    void audittool(){
+    
+}
+
+void audittool(){
         sh '''
             java -version
             mvn -version
@@ -66,4 +69,3 @@ pipeline{
             return env.int_version + ':' + env.BUILD_NUMBER
         }
     }
-}
