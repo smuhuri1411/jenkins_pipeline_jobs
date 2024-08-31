@@ -69,3 +69,11 @@ void audittool(){
             return env.int_version + ':' + env.BUILD_NUMBER
         }
     }
+
+
+    void unittest(){
+        sh '''
+            mvn test
+
+        '''
+    }
