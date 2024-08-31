@@ -38,7 +38,7 @@ pipeline{
         stage('Build'){
             input{
                 parameters{
-                    String(name: 'Environment', description: 'Please mention the build environment')
+                    string(name: 'Environment', description: 'Please mention the build environment')
                 }
 
                 message 'Build Confirmation'
