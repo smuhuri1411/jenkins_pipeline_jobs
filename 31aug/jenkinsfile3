@@ -1,0 +1,49 @@
+pipeline{
+    agent any
+
+    environment{
+        rel_version = 'R1'
+        int_version = '31.3'
+    }
+
+    stages{
+
+        stage('AuditTools'){
+            steps{
+                sh '''
+                java -version
+                mvn -version
+
+               '''
+
+            }
+            
+        }
+
+        stage('UnitTest'){
+            
+            dir('../maven-samples/single-module'){
+                steps{
+                    sh '''
+                        echo "In "${STAGE_NAME}" stage..."
+                        mv test
+                    '''
+                }
+            }
+            
+        }
+
+        stage('Deploy'){
+            dir('../maven-samples/single-module'){
+                steps{
+                    sh '''
+                        echo "In the Build Phase.. Building App Release "${rel_version}" with integrated version "${int_version}""
+                        mvn clean package
+
+                    '''
+                }
+            }
+        }
+    }
+    
+}
