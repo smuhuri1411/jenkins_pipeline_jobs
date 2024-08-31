@@ -55,7 +55,7 @@ void audittool(){
     void deployapp(){
         sh '''
             mvn versions:set -DnewVersion="${version_suffix}"-SNAPSHOT
-            mvn versions:update-child-module
+            mvn versions:update-child-modules
             mvn clean package
         '''
     }
