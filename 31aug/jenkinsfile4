@@ -1,0 +1,69 @@
+pipeline{
+    agent any
+
+    parameters{
+        booleanParam(name: 'Release', description: 'Is this a release candidate?')
+    }
+
+    environment{
+        rel_version = '31.4'
+        int_version = 'R1'
+    }
+
+    stages{
+
+        stage('AuditTools'){
+            steps{
+                audittool()
+            }
+        }
+
+        stage('UnitTest'){
+            steps{
+                dir('./maven-samples/single-module'){
+                    unittest()
+                }
+            }
+        }
+
+        stage('Deploy'){
+            
+            environment{
+                version_suffix = buildversion()
+            }
+            steps{
+                dir('./maven-samples/single-module'){
+                    
+                    echo "Build Application: ${version_suffix}"
+                    deployapp()
+                }
+            }
+        }
+    }
+
+    void audittool(){
+        sh '''
+            java -version
+            mvn -version
+
+        '''
+    }
+
+    void deployapp(){
+        sh '''
+            mvn versions:set -DnewVersion="${version_suffix}"-SNAPSHOT
+            mvn versions:update-child-module
+            mvn clean package
+        '''
+    }
+
+    String buildversion(){
+        if (params.Release){
+            return env.rel_version + ':' + env.BUILD_NUMBER
+        }
+
+        else{
+            return env.int_version + ':' + env.BUILD_NUMBER
+        }
+    }
+}
