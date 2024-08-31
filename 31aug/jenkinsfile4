@@ -52,13 +52,7 @@ void audittool(){
         '''
     }
 
-    void deployapp(){
-        sh '''
-            mvn versions:set -DnewVersion="${version_suffix}"-SNAPSHOT
-            mvn versions:update-child-modules
-            mvn clean package
-        '''
-    }
+
 
     String buildversion(){
         if (params.Release){
@@ -75,5 +69,14 @@ void audittool(){
         sh '''
             mvn test
 
+        '''
+    }
+
+
+    void deployapp(){
+        sh '''
+            mvn versions:set -DnewVersion="${version_suffix}"-SNAPSHOT
+            mvn versions:update-child-modules
+            mvn clean package
         '''
     }
