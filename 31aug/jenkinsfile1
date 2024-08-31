@@ -1,0 +1,54 @@
+pipeline{
+    agent any
+    
+    environment{
+        release = "31.0"
+    }
+    
+    stages{
+        stage('Fetch'){
+            steps{
+                script{
+
+                    def gitRepoURL = 'https://github.com/anshulc55/Jenkins_Upgradev3'
+
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/master']],
+                        userRemoteConfig: [[url: gitRepoURL]],
+                        configuration: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
+                    ])
+                }
+            }
+        }
+
+        stage('UnitTest'){
+
+            environment{
+                log = 'TRACE'
+            }
+            steps{
+                sh '''
+                    echo "In Unit Testing Phase..."
+                    echo "Testing release "${release}" with log level "${log}""
+                '''
+            }
+        }
+
+        stage('Build'){
+            steps{
+                sh 'echo "In the Build Phase!! Building app release version "$release""'
+            }
+        }
+    }
+
+    post{
+        success{
+            echo "Pipeline Succeeded!!!"
+        }
+
+        failure{
+            echo "Pipeline failed... Take necessary steps"
+        }
+    }
+}
