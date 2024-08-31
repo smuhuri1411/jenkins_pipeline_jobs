@@ -1,0 +1,53 @@
+pipeline{
+    agent any 
+
+    environment{
+        release = 'R31.2'
+    }
+
+    stages{
+        stage('Fetch'){
+
+            steps{
+                script{
+                    def gitrepourl = 'https://github.com/anshulc55/Jenkins_Upgradev3'
+
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        userRemoteConfigs: [[url: gitrepourl]],
+                        configuration: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
+                    ])
+                }
+
+                sh 'ls -l $WORKSPACE'
+            }
+            
+            
+        }
+
+        stage('UnitTest'){
+            steps{
+                sh '''
+                    echo "In the "${STAGE_NAME}" stage..."
+
+                '''
+            }
+        }
+
+        stage('Build'){
+            input{
+                parameters{
+                    String(name: 'Environment', description: 'Please mention the build environment')
+                }
+
+                message 'Build Confirmation'
+                ok 'Proceed for Build'
+            }
+
+            steps{
+                sh 'echo "Building Application in "${Environment}" env with release version "${release}""'
+            }
+        }
+    }
+}
