@@ -1,0 +1,73 @@
+pipeline{
+    agent any 
+
+    parameters{
+        booleanParam(name: 'RELEASE', default: true, description: 'Select if this is a Release Version')
+    }
+
+    environment{
+        rel_version = '9.3.2'
+        int_version = 'R2'
+        version_suffix = getBuildSuffix()
+    }
+
+    stages{
+        stage('Audit Tools'){
+            steps{
+                echo "In the ${STAGE_NAME} stage for validating version of tools required"
+                auditTools()
+            }
+        }
+
+        stage('Unit Test'){
+            steps{
+                
+                echo "This is the ${STAGE_NAME} phase"
+
+                unit_test()
+            }
+        }
+
+        stage('Deploy'){
+            steps{
+                dir('./java-tomcat-sample'){
+                    packageApplication()
+                }
+                
+            }
+        }
+
+        stage('Publish'){
+            steps{
+                archiveArtifacts('**/*.war')
+            }
+        }
+    }
+}
+
+
+String getBuildSuffix(){
+    if(params.RELEASE){
+        return env.rel_version + ':' + 'ci-' + env.BUILD_NUMBER + '-SNAPSHOT'
+    }
+    else{
+        return env.int_version + ':' + 'ci-' + env.BUILD_NUMBER + '-SNAPSHOT'
+    }
+}
+
+void auditTools(){
+    sh 'java -version'
+    sh 'mvn -version'
+}
+
+void unit_test(){
+    sh 'mvn -f "java-tomcat-sample/pom.xml" test'
+}
+
+void packageApplication(){
+    sh '''
+        mvn versions:set -DnewVersion="${version_suffix}"
+        mvn versions:update-child-modules
+        mmvn clean install
+    '''
+}
