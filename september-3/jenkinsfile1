@@ -1,0 +1,78 @@
+pipeline{
+    agent any
+
+    parameters{
+        boolenParam(name: 'Release', description: 'Is this a Release Version?')
+    }
+
+    environment{
+        rel_version = '9.3.1'
+        int_version = 'R1'
+    }
+
+    stages{
+
+        stage('Audit Tools'){
+            steps{
+                auditTools()
+            }
+            
+        }
+
+        stage('Unit Test'){
+            steps{
+                dir('./java-tomcat-sample'){
+                    echo "In the ${STAGE_NAME} stage"
+                
+                    unittest()
+                }
+                
+            }
+        }
+
+        stage('Deploy'){
+            environment{
+                version_suffix = getBuildNumber()
+            }
+
+            steps{
+                dir('./java-tomcat-sample'){
+                    echo "Building the Application with ${version_suffix} version"
+                    packageApp()
+                }
+                
+            }
+        }
+    }
+}
+
+
+void auditTools(){
+    sh '''
+        git --version
+        java -version
+        mvn -version
+
+    '''
+}
+
+void unittest(){
+    sh 'mvn test'
+}
+
+String getBuildNumber(){
+    if(param.Release){
+        return env.rel_version + 'ci:' + env.BUILD_NUMBER
+    }
+    else{
+        return env.int_version + 'ci:' + env.BUILD_NUMBER
+    }
+}
+
+void packageApp(){
+    sh '''
+        mvn versions:set -DnewVersion="${version_suffix}"-SNAPSHOT
+        mvn versions:update-child-module
+        mvn clean package
+    '''
+}
