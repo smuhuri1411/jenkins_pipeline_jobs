@@ -62,17 +62,17 @@ void unittest(){
 
 String getBuildNumber(){
     if(params.Release){
-        return env.rel_version + 'ci:' + env.BUILD_NUMBER
+        return env.rel_version + ':ci-' + env.BUILD_NUMBER
     }
     else{
-        return env.int_version + 'ci:' + env.BUILD_NUMBER
+        return env.int_version + ':ci-' + env.BUILD_NUMBER
     }
 }
 
 void packageApp(){
     sh '''
         mvn versions:set -DnewVersion="${version_suffix}"-SNAPSHOT
-        mvn versions:update-child-module
+        mvn versions:update-child-modules
         mvn clean package
     '''
 }
