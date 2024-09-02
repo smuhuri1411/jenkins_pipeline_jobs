@@ -8,7 +8,7 @@ pipeline{
     environment{
         rel_version = '9.3.2'
         int_version = 'R2'
-        version_suffix = getBuildSuffix()
+        
     }
 
     stages{
@@ -29,6 +29,10 @@ pipeline{
         }
 
         stage('Deploy'){
+            environment{
+
+                version_suffix = getBuildSuffix()
+            }
             steps{
                 dir('./java-tomcat-sample'){
                     packageApplication()
