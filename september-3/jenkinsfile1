@@ -61,7 +61,7 @@ void unittest(){
 }
 
 String getBuildNumber(){
-    if(param.Release){
+    if(params.Release){
         return env.rel_version + 'ci:' + env.BUILD_NUMBER
     }
     else{
