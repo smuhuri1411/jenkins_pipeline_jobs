@@ -43,7 +43,7 @@ pipeline{
 
         stage('Publish'){
             when {
-                expression (param.RELEASE)
+                expression {return params.RELEASE}
             }
             steps{
                 archiveArtifacts('**/*.war')
