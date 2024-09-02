@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     parameters{
-        boolenParam(name: 'Release', description: 'Is this a Release Version?')
+        booleanParam(name: 'Release', description: 'Is this a Release Version?')
     }
 
     environment{
