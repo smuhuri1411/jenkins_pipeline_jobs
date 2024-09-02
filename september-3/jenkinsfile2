@@ -68,6 +68,6 @@ void packageApplication(){
     sh '''
         mvn versions:set -DnewVersion="${version_suffix}"
         mvn versions:update-child-modules
-        mmvn clean install
+        mvn clean install
     '''
 }
